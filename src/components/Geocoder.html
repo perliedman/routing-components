@@ -1,0 +1,155 @@
+<input
+  ref:input
+  value='{{waypoint.name}}'
+  on:keydown='keydown(event)'
+  on:focus='refs.input.select()'
+  on:blur='set({showSuggestions: false})'/>
+{{#if showSuggestions}}
+<ul>
+  {{#each suggestions as suggestion, i}}
+  <li class={{selectedIndex === i ? 'selected' : ''}}>
+    <button type="button" on:mousedown="selectSuggestion(suggestion)">{{suggestion.name}}</button>
+  </li>
+  {{/each}}
+</ul>
+{{/if}}
+
+<script>
+var idCounter = 0
+
+export default {
+  oncreate () {
+    this.observe('waypoint', wp => {
+      if (!wp.name) {
+        this.reverseGeocode()
+      }
+    })
+  },
+
+  data () {
+    return {
+      id: ++idCounter,
+      suggestions: [],
+      showSuggestions: false,
+      selectedIndex: -1
+    }
+  },
+
+  methods: {
+    keydown (e) {
+      const currIndex = this.get('selectedIndex')
+      const changeSelection = d => {
+        const nSuggestions = this.get('suggestions').length
+
+        this.set({selectedIndex: (currIndex + d) % nSuggestions})
+      }
+
+      switch (e.keyCode) {
+        case 13:
+          if (currIndex >= 0) {
+            this.selectSuggestion(this.get('suggestions')[currIndex])
+          } else {
+            this.geocode(e)
+          }
+          break
+        case 38:
+          changeSelection(-1)
+          break
+        case 40:
+          changeSelection(1)
+          break
+      }
+    },
+
+    geocode (e) {
+      const waypoint = this.get('waypoint')
+      const value = e.target.value
+
+      this.set({showSuggestions: true})
+
+      if (value !== waypoint.name) {
+        this.set({suggestions: [], selectedIndex: -1})
+
+        this.get('geocoder').geocode(value, results => {
+          results = results.map(result => ({
+            name: result.name,
+            lngLat: [result.center.lng, result.center.lat]
+          }))
+
+          if (results.length === 1) {
+            this.fire('geocoded', {data: results[0]})
+          } else {
+            this.set({suggestions: results})
+          }
+        })
+      }
+    },
+
+    reverseGeocode () {
+      const waypoint = this.get('waypoint')
+      const lngLat = waypoint.lngLat
+      if (lngLat) {
+        this.get('geocoder').reverse(
+          {lat: lngLat[1], lng: lngLat[0]},
+          18,
+          results =>
+            this.fire('reversegeocoded', {data: {name: results[0].name}}))
+      }
+    },
+
+    selectSuggestion (suggestion) {
+      this.set({showSuggestions: false})
+      this.fire('geocoded', {data: suggestion})
+    }
+  }
+}
+</script>
+
+<style>
+  input {
+    border: none;
+    border-bottom: 1px solid #ddd;
+    width: 100%;
+    margin: 0.5em 0 0.5em 0;
+    padding: 0 0.3em 0.2em 0.3em;
+  }
+
+  ul {
+    left: 0.25em;
+    background-color: white;
+    list-style-type: none;
+    position: absolute;
+    border: 1px solid #ddd;
+    padding: 0 0.5em 0;
+    margin: 0;
+    word-wrap: none;
+    text-overflow: ellipsis;
+  }
+
+  li {
+    padding-top: 0.5em;
+    border-bottom: 1px solid #ddd;
+  }
+
+  li:last {
+    border-bottom: none;
+  }
+
+  li.selected {
+    background-color: #ddd;
+  }
+
+  button {
+    background: none;
+    color: inherit;
+    border: none;
+    padding: 0;
+    font: inherit;
+    cursor: pointer;
+    outline: inherit;
+    word-wrap: none;
+    text-overflow: ellipsis;
+    width: 100%;
+    text-align: left;
+  }
+</style>
