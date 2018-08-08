@@ -38,11 +38,11 @@ import Itinerary from './Itinerary.html'
 import Waypoint from '../waypoint'
 
 export default {
-  oncreate () {
-    this.observe('waypoints', waypoints => {
+  onstate ({ changed, current }) {
+    if (changed.waypoints) {
       this.lastRouteTimestamp = +new Date()
-      this.get('router').route(waypoints, this.routeReceived.bind(this))
-    })
+      this.get('router').route(current.waypoints, this.routeReceived.bind(this))
+    }
   },
 
   data () {

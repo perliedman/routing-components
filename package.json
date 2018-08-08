@@ -1,12 +1,15 @@
 {
   "name": "routing-components",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Abstract, shared Svelte components for map routing",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": ["routing", "components"],
+  "keywords": [
+    "routing",
+    "components"
+  ],
   "author": "Per Liedman <per@liedman.net>",
   "homepage": "https://github.com/perliedman/routing-components",
   "license": "ISC",

@@ -18,12 +18,12 @@
 var idCounter = 0
 
 export default {
-  oncreate () {
-    this.observe('waypoint', wp => {
-      if (!wp.name) {
+  onstate ({changed, current}) {
+    if (changed.waypoint) {
+      if (!current.waypoint.name) {
         this.reverseGeocode()
       }
-    })
+    }
   },
 
   data () {
