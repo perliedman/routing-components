@@ -1,21 +1,21 @@
-<div class={{'routing-alternative' + (selected ? ' routing-selected' : '')}}>
+<div class={'routing-alternative' + (selected ? ' routing-selected' : '')}>
   <div>
     <h1>
-      <a href="#" on:click='fire("selected")'>{{route.name}}</a>
+      <a href="#" on:click='fire("selected")'>{route.name}</a>
     </h1>
     <div class="routing-route-summary">
-      {{formatDistance(route.summary.totalDistance, -1)}},
-      {{formatDuration(route.summary.totalTime)}}
+      {formatDistance(route.summary.totalDistance, -1)},
+      {formatDuration(route.summary.totalTime)}
     </div>
   </div>
   <div class="routing-route-itinerary">
     <table>
       <tbody>
-        {{#each route.instructions as instr}}
+        {#each route.instructions as instr}
           <tr>
-            <td>{{instr.text}}</td>
+            <td>{instr.text}</td>
           </tr>
-        {{/each}}
+        {/each}
       </tbody>
     </table>
   </div>

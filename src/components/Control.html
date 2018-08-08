@@ -1,34 +1,34 @@
 <div class="routing-control">
   <div>
-  {{#each waypoints as waypoint, i}}
-    <:Component {Marker}
-      map={{map}}
-      lngLat={{waypoint.lngLat}}
-      dragging={{draggedWaypoint === waypoint}}
+  {#each waypoints as waypoint, i}
+    <svelte:component this={Marker}
+      map={map}
+      lngLat={waypoint.lngLat}
+      dragging={draggedWaypoint === waypoint}
       on:drag='dragWaypoint(event, i, true)'
       on:dragend='dragWaypoint(event, i)' />
-    {{#if geocoder}}
+    {#if geocoder}
     <Geocoder
-      waypoint={{waypoint}}
-      geocoder={{geocoder}}
+      waypoint={waypoint}
+      geocoder={geocoder}
       on:geocoded='setWaypoint(i, event.data)'
       on:reversegeocoded='setWaypoint(i, event.data)'/>
-    {{/if}}
-  {{/each}}
+    {/if}
+  {/each}
   </div>
   <div>
-    {{#each routes as route}}
-      <:Component {RouteLine}
-        map={{map}}
-        route={{route}}
-        selected={{route === selectedRoute}}
+    {#each routes as route}
+      <svelte:component this={RouteLine}
+        map={map}
+        route={route}
+        selected={route === selectedRoute}
         on:selected='selectRoute(route)'
         on:dragging='addDraggingWaypoint(event.afterWpIndex, event.lngLat)'/>
       <Itinerary
-        route={{route}}
-        selected={{route === selectedRoute}}
+        route={route}
+        selected={route === selectedRoute}
         on:selected='selectRoute(route)' />
-    {{/each}}
+    {/each}
   </div>
 </div>
 

@@ -1,18 +1,18 @@
 <input
   ref:input
-  value='{{waypoint.name}}'
+  value='{waypoint.name}'
   on:keydown='keydown(event)'
   on:focus='refs.input.select()'
   on:blur='set({showSuggestions: false})'/>
-{{#if showSuggestions}}
+{#if showSuggestions}
 <ul>
-  {{#each suggestions as suggestion, i}}
-  <li class={{selectedIndex === i ? 'selected' : ''}}>
-    <button type="button" on:mousedown="selectSuggestion(suggestion)">{{suggestion.name}}</button>
+  {#each suggestions as suggestion, i}
+  <li class={selectedIndex === i ? 'selected' : ''}>
+    <button type="button" on:mousedown="selectSuggestion(suggestion)">{suggestion.name}</button>
   </li>
-  {{/each}}
+  {/each}
 </ul>
-{{/if}}
+{/if}
 
 <script>
 var idCounter = 0
