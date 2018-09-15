@@ -3,6 +3,7 @@
   "version": "2.0.1",
   "description": "Abstract, shared Svelte components for map routing",
   "main": "index.js",
+  "svelte": "src/main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -17,7 +18,8 @@
   "dependencies": {
     "@mapbox/polyline": "^0.2.0",
     "osrm-text-instructions": "^0.12.0",
-    "string-template": "^1.0.0"
+    "string-template": "^1.0.0",
+    "svelte": "^2.9.11"
   },
   "devDependencies": {
     "eslint": "^4.18.2",

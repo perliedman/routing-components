@@ -41,7 +41,7 @@ export default {
   onstate ({ changed, current }) {
     if (changed.waypoints) {
       this.lastRouteTimestamp = +new Date()
-      this.get('router').route(current.waypoints, this.routeReceived.bind(this))
+      this.get().router.route(current.waypoints, this.routeReceived.bind(this))
     }
   },
 
@@ -70,7 +70,7 @@ export default {
       var firstNextRun = (this.lastRouteTimestamp || now) + 250
       var timeout = dragging ? Math.max(0, firstNextRun - now) : 0
       this.routeDebounce = setTimeout(() => {
-        const waypoints = this.get('waypoints')
+        const waypoints = this.get().waypoints
         waypoints[i].lngLat = e.lngLat
         if (!dragging) {
           waypoints[i].name = null
@@ -85,12 +85,12 @@ export default {
       this.set({selectedRoute: route})
     },
     setWaypoint (i, data) {
-      const waypoints = this.get('waypoints')
+      const waypoints = this.get().waypoints
       Object.assign(waypoints[i], data)
       this.set({waypoints})
     },
     addDraggingWaypoint (afterWpIndex, lngLat) {
-      const waypoints = this.get('waypoints')
+      const waypoints = this.get().waypoints
       const waypoint = new Waypoint(lngLat)
       waypoints.splice(afterWpIndex + 1, 0, waypoint)
       this.set({waypoints, draggedWaypoint: waypoint})
@@ -113,21 +113,5 @@ export default {
     padding: 0.25em 0.75em;
     box-shadow: 0 1px 5px rgba(0,0,0,0.65);
     border-radius: 4px;
-  }
-
-  .routing-control h1 {
-    font-size: 100%;
-    clear: none;
-    display: inline-block;
-  }
-
-  .routing-control h1 a {
-    text-decoration: none;
-    color: inherit;
-  }
-
-  .routing-route-summary {
-    float: right;
-    margin: 0.83em;
   }
 </style>
